@@ -1,11 +1,14 @@
 # This repo is just from self learning
 
 ## Command :
+```bash
 docker network create --driver=bridge --subnet 192.168.100.24 net1
+```
 
 ## Start Container
+```bash
 docker run --name namenode -h namenode --net net1 --ip 192.168.100.2 -p 9870:9870 -p 8088:8088 -p 8888:8888 -p 10002:10002  -itd vengleab/hadoop-spark-hive:arm-v1
-
+```
 
 ## Test spark
 ```bash
