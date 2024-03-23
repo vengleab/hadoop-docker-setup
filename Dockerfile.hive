@@ -1,0 +1,17 @@
+from vengleab/hadoop-spark:arm-v1
+
+COPY data/apache-hive-3.1.3-bin /usr/local/hive
+
+ENV HIVE_HOME=/usr/local/hive
+ENV PATH=$PATH:$HIVE_HOME/bin
+ENV CLASSPATH=$CLASSPATH:/usr/local/Hadoop/lib/*:
+ENV CLASSPATH=$CLASSPATH:/usr/local/hive/lib/*:
+
+COPY data/config/hive-env.sh $HIVE_HOME/bin/hive-env.sh
+COPY data/config/hive-config.sh $HIVE_HOME/bin/hive-config.sh
+ENV HADOOP_CLASSPATH=/usr/local/hive/lib/*.jar
+
+COPY ./entry-point-hive.sh /entry-point.sh
+RUN chmod +x /entry-point.sh
+
+ENTRYPOINT [ "/entry-point.sh" ]

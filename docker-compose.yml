@@ -1,0 +1,17 @@
+version: '3'
+services:
+  namenode:
+    stdin_open: true # docker run -i
+    tty: true 
+    image: vengleab/hadoop-spark
+    container_name: namenode
+    ports:
+      - 50070:50070
+      - 8088:8088
+    volumes:
+      - ./data:/usr/local/hadoop/data
+    networks:
+      - hadoop-net
+
+networks:
+  hadoop-net:

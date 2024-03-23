@@ -1,0 +1,26 @@
+FROM vengleab/hadoop:arm-v1
+
+COPY data/spark-3.5.0-bin-hadoop3 /usr/local/spark
+
+ENV SPARK_HOME=/usr/local/spark
+ENV HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
+ENV PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+ENV SPARK_LOCAL_IP=127.0.0.1
+COPY data/config/spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf 
+
+RUN apt-get install -y gcc python3-dev 
+RUN python3 -m pip install -U pip
+RUN pip3 install packaging setuptools
+RUN pip3 install py4j notebook 
+RUN pip3 install jupyterlab pyspark
+
+ENV PYSPARK_DRIVER_PYTHON="jupyter"
+ENV PYSPARK_DRIVER_PYTHON_OPTS="lab --ip=0.0.0.0 --allow-root"
+ENV PYSPARK_PYTHON=python3
+
+EXPOSE 4040 8888 8088 9870 22
+
+COPY ./entry-point-hive.sh /entry-point.sh
+RUN chmod +x /entry-point.sh
+
+ENTRYPOINT [ "/entry-point.sh" ]
